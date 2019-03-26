@@ -1,3 +1,2 @@
 # esp32_camera_streaming
-A simple firmware for an AI thinker ESP32 camera that serves a password protected stream of the camera feed.
-This is a work in progress.
+This is basically the CameraWebServer provided with ESP32 boards in the Arduino environment except that it is stripped down from every feature except streaming video.
