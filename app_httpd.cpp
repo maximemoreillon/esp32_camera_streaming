@@ -16,10 +16,10 @@
 #include "esp_camera.h"
 #include "img_converters.h"
 #include "Arduino.h"
+#include "credentials.h";
 
 //#include "fb_gfx.h"
 //#include "dl_lib.h"
-
 
 #define PART_BOUNDARY "123456789000000000000987654321"
 static const char* _STREAM_CONTENT_TYPE = "multipart/x-mixed-replace;boundary=" PART_BOUNDARY;
@@ -36,8 +36,9 @@ static esp_err_t stream_handler(httpd_req_t *req){
   char * part_buf[64];
 
   
-  // CHECK PASSWORD
   
+  // CHECK PASSWORD
+  /*
   // Get the query string
   char query[64];
   Serial.print("Getting query: ");
@@ -48,7 +49,7 @@ static esp_err_t stream_handler(httpd_req_t *req){
   Serial.print("Checking if query contains password: ");
   Serial.println(httpd_query_key_value(query, "password", app_password, sizeof(app_password)));
 
-  if(strcmp(app_password,"123456") == 0){
+  if(strcmp(app_password,CAMERA_PASSWORD) == 0){
     Serial.println("password ok");
   }
   else {
@@ -58,6 +59,9 @@ static esp_err_t stream_handler(httpd_req_t *req){
     httpd_resp_send(req, resp, strlen(resp));
     return ESP_FAIL;
   }
+  */
+  // end of check password
+  
 
     static int64_t last_frame = 0;
     if(!last_frame) {
@@ -68,6 +72,7 @@ static esp_err_t stream_handler(httpd_req_t *req){
     if(res != ESP_OK){
         return res;
     }
+    
 
     while(true){
         fb = esp_camera_fb_get();
