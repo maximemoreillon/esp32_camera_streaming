@@ -8,6 +8,8 @@
 
 #include "credentials.h";
 
+// Wifi settings
+#define WIFI_CONNECTION_TIMEOUT 5000
 
 #define PWDN_GPIO_NUM     32
 #define RESET_GPIO_NUM    -1
@@ -76,18 +78,7 @@ void setup() {
     return;
   }
 
-  //drop down frame size for higher initial frame rate
-  //sensor_t * s = esp_camera_sensor_get();
-  //s->set_framesize(s, FRAMESIZE_QVGA);
-
-  WiFi.begin(WIFI_SSID, WIFI_PASSWORD);
-
-  while (WiFi.status() != WL_CONNECTED) {
-    delay(500);
-    Serial.print(".");
-  }
-  Serial.println("");
-  Serial.println("WiFi connected");
+  wifi_setup();
 
   startCameraServer();
 
@@ -97,6 +88,5 @@ void setup() {
 }
 
 void loop() {
-  // put your main code here, to run repeatedly:
-  delay(10000);
+  wifi_connection_manager();
 }
