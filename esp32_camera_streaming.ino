@@ -6,7 +6,7 @@
 //            or another board which has PSRAM enabled
 //
 
-#include "credentials.h";
+#include "jtektiot_credentials.h";
 
 // Wifi settings
 #define WIFI_CONNECTION_TIMEOUT 5000
@@ -64,7 +64,8 @@ void setup() {
     config.frame_size = FRAMESIZE_VGA;
     config.jpeg_quality = 10;
     config.fb_count = 2;
-  } else {
+  }
+  else {
     Serial.println("PSRAM not found");
     config.frame_size = FRAMESIZE_SVGA;
     config.jpeg_quality = 12;
@@ -78,13 +79,12 @@ void setup() {
     return;
   }
 
-  wifi_setup();
+  //drop down frame size for higher initial frame rate
+  sensor_t * s = esp_camera_sensor_get();
+  s->set_framesize(s, FRAMESIZE_QVGA);
 
+  wifi_setup() ;
   startCameraServer();
-
-  Serial.print("Camera Ready! Use 'http://");
-  Serial.print(WiFi.localIP());
-  Serial.println("' to connect");
 }
 
 void loop() {
