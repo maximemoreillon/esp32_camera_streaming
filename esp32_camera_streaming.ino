@@ -1,12 +1,16 @@
 #include "esp_camera.h"
 #include <WiFi.h>
+#include <ESPmDNS.h>
 
 //
 // WARNING!!! Make sure that you have either selected ESP32 Wrover Module,
 //            or another board which has PSRAM enabled
 //
 
-#include "jtektiot_credentials.h";
+//#include "credentials.h";
+#define WIFI_SSID "ssid"
+#define WIFI_PASSWORD "ssid_password"
+#define HOSTNAME "esp32cam"
 
 // Wifi settings
 #define WIFI_CONNECTION_TIMEOUT 5000
@@ -61,11 +65,10 @@ void setup() {
   if(psramFound()){
     Serial.println("PSRAM found");
     //config.frame_size = FRAMESIZE_UXGA;
-    config.frame_size = FRAMESIZE_VGA;
+    config.frame_size = FRAMESIZE_SVGA;
     config.jpeg_quality = 10;
     config.fb_count = 2;
-  }
-  else {
+  } else {
     Serial.println("PSRAM not found");
     config.frame_size = FRAMESIZE_SVGA;
     config.jpeg_quality = 12;
@@ -79,12 +82,20 @@ void setup() {
     return;
   }
 
-  //drop down frame size for higher initial frame rate
-  sensor_t * s = esp_camera_sensor_get();
-  s->set_framesize(s, FRAMESIZE_QVGA);
-
-  wifi_setup() ;
+  wifi_setup();
+  if (!MDNS.begin(HOSTNAME)) {
+    Serial.println("Error setting up MDNS responder!");
+    while(1) {
+        delay(1000);
+    }
+  }
+  Serial.println("mDNS responder started");
   startCameraServer();
+
+  Serial.print("Camera Ready! Use 'http://");
+  Serial.print(WiFi.localIP());
+  Serial.println("' to connect");
+  MDNS.addService("http", "tcp", 80);
 }
 
 void loop() {
