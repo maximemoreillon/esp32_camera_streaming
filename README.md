@@ -1,2 +1,5 @@
-# esp32_camera_streaming
-This is basically the CameraWebServer provided with ESP32 boards in the Arduino environment except that it is stripped down from every feature except streaming video.
+# ESP32 Camera streaming
+
+This is basically the CameraWebServer provided with ESP32 boards in the Arduino environment except that it is stripped down from every feature except streaming.
+
+With the memory made available from removing the face recongition feature, OTA updates are now possible.
