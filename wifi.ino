@@ -2,6 +2,7 @@ void wifi_setup() {
   // Settings
   WiFi.mode(WIFI_STA);
   WiFi.begin(WIFI_SSID,WIFI_PASSWORD);
+  Serial.println(F("[WIFI] Connecting..."));
 }
 
 void wifi_connection_manager(){
@@ -17,13 +18,13 @@ void wifi_connection_manager(){
       // Acknowledge disconnection
       wifi_connected = false;
       wifi_disconnected_time = millis();
-      Serial.println(F("[WIFI] disconnected"));
+      Serial.println(F("[WIFI] Disconnected"));
     }
 
     // Force reconnect if fail
     if(millis() - wifi_disconnected_time > WIFI_CONNECTION_TIMEOUT){
       wifi_disconnected_time = millis();
-      Serial.println(F("[WIFI] connection timeout"));
+      Serial.println(F("[WIFI] Connection timeout, resetting connection..."));
       WiFi.disconnect(true);
       wifi_setup();
     }
