@@ -52,11 +52,8 @@ static esp_err_t stream_handler(httpd_req_t *req){
   char * part_buf[64];
 
   // response headers
-  res = httpd_resp_set_type(req, _STREAM_CONTENT_TYPE);
-  if(res != ESP_OK){
-    return res;
-  }
-  //res = httpd_resp_set_hdr(req, "Access-Control-Allow-Origin", "*"); // Allowing CORS
+  httpd_resp_set_type(req, _STREAM_CONTENT_TYPE);
+  httpd_resp_set_hdr(req, "Access-Control-Allow-Origin", "*"); // Allowing CORS
 
   // Streaming loop
   while(true){
