@@ -1,6 +1,6 @@
 # ESP32 Camera streaming
 
-This is basically the CameraWebServer example sketch provided with ESP32 boards in the Arduino environment except that it is stripped down from every feature except streaming.
+This is basically the CameraWebServer example sketch provided with ESP32 boards in the Arduino environment except that it is stripped down from every feature except video streaming.
 
 With the memory made available from removing the face recongition feature, OTA updates are now possible.
 
