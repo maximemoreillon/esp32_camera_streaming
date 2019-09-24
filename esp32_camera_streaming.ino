@@ -1,5 +1,6 @@
 #include "esp_camera.h"
 #include <WiFi.h>
+#include <ESPmDNS.h>
 #include <WiFiUdp.h>
 #include <ArduinoOTA.h>
 
@@ -10,12 +11,11 @@
  * 
  */
 
-// Getting WIFI_SSID and WIFI_PASSWORD from external credentials file
-#include "jtektiot_credentials.h";
+// Getting WIFI_SSID, WIFI_PASSWORD, HOSTNAME, and OTA_PASSWORD from external credentials file
+#include "credentials.h";
 
 
 // Wifi settings
-#define HOSTNAME "camera"
 #define WIFI_CONNECTION_TIMEOUT 5000
 
 // Camera pinout
@@ -48,6 +48,23 @@ void setup() {
   wifi_setup();
   startCameraServer();
   ota_setup();
+  if (!MDNS.begin(HOSTNAME)) {
+    Serial.println("Error setting up MDNS responder!");
+    while(1) {
+        delay(1000);
+    }
+  }
+  Serial.println("mDNS responder started");
+
+  Serial.print("Camera Ready! Use 'http://");
+  Serial.print(WiFi.localIP());
+  Serial.println("' to connect");
+  MDNS.addService("http", "tcp", 80);
+  sensor_t * s = esp_camera_sensor_get();
+  s->set_vflip(s, 1); // flip vertically
+  //s->set_brightness(s, 1); //+ve to increase, -ve to decrease
+  //s->set_saturation(s, -2); //+ve to increase, -ve to lower
+  s->set_hmirror(s, 1); // mirror horizontally
 }
 
 void loop() {
